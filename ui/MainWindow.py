@@ -2,8 +2,10 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QDir
 from PyQt5.QtCore import pyqtSlot, Q_FLAGS
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMenu
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QTreeWidgetItem
 from math import floor
@@ -13,6 +15,7 @@ from core.Player import MediaPlayer
 from core.Workers import MetadataWorker, SubtitleWorker
 from core.Workers import SearchWorker
 from core.plugins.PluginLoader import PluginLoader
+from core.plugins.PluginMenu import PluginMenu
 from ui.Preferences import PlayerSettings
 from ui.Ui_MainWindow import Ui_MainWindow
 
@@ -64,13 +67,18 @@ class MainWindow(QMainWindow):
         self.player.playerError.connect(self.showErrorDialog)
         self.player.playerClosed.connect(self.onPlayerClosed)
 
+        self.ui.movie_tree.setSortingEnabled(True)
+
+        self.menu = PluginMenu.constructMenu(self.ui.menuPlugins)
+
+    def show(self):
+        super().show()
+
         try:
             self.plugins = PluginLoader.getLoadedPlugins()
             self.ui.status_bar.setText("Loaded {} plugin(s)".format(len(self.plugins)))
         except BaseException as e:
             self.showError("Error loading plugins: " + str(e))
-
-        self.ui.movie_tree.setSortingEnabled(True)
 
     def onPlayerClosed(self):
         self.ui.centralwidget.setEnabled(True)
