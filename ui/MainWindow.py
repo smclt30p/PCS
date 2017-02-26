@@ -70,6 +70,7 @@ class MainWindow(QMainWindow):
         except BaseException as e:
             self.showError("Error loading plugins: " + str(e))
 
+        self.ui.movie_tree.setSortingEnabled(True)
 
     def onPlayerClosed(self):
         self.ui.centralwidget.setEnabled(True)

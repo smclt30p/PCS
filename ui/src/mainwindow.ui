@@ -17,9 +17,9 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_3" stretch="5,60,20,5">
+   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="5,60,20,1">
     <property name="spacing">
-     <number>6</number>
+     <number>9</number>
     </property>
     <property name="leftMargin">
      <number>9</number>
@@ -41,121 +41,25 @@
      </widget>
     </item>
     <item>
-     <widget class="QTabWidget" name="tabs">
-      <property name="currentIndex">
-       <number>0</number>
+     <widget class="QTreeWidget" name="movie_tree">
+      <property name="rootIsDecorated">
+       <bool>false</bool>
       </property>
-      <widget class="QWidget" name="tab_movie">
-       <attribute name="title">
-        <string>Movies</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
-        <property name="spacing">
-         <number>9</number>
-        </property>
-        <property name="leftMargin">
-         <number>9</number>
-        </property>
-        <property name="topMargin">
-         <number>9</number>
-        </property>
-        <property name="rightMargin">
-         <number>9</number>
-        </property>
-        <property name="bottomMargin">
-         <number>9</number>
-        </property>
-        <item>
-         <widget class="QTreeWidget" name="movie_tree">
-          <property name="rootIsDecorated">
-           <bool>false</bool>
-          </property>
-          <column>
-           <property name="text">
-            <string>Title</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Length</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Plugin</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Rating</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_tv">
-       <attribute name="title">
-        <string>TV Shows</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <property name="spacing">
-         <number>9</number>
-        </property>
-        <property name="leftMargin">
-         <number>9</number>
-        </property>
-        <property name="topMargin">
-         <number>9</number>
-        </property>
-        <property name="rightMargin">
-         <number>9</number>
-        </property>
-        <property name="bottomMargin">
-         <number>9</number>
-        </property>
-        <item>
-         <widget class="QTreeWidget" name="tv_tree">
-          <property name="rootIsDecorated">
-           <bool>false</bool>
-          </property>
-          <attribute name="headerStretchLastSection">
-           <bool>true</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Title</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Length</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Seasons</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Episodes</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Plugin</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Quality</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <column>
+       <property name="text">
+        <string>Title</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Length</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Plugin</string>
+       </property>
+      </column>
      </widget>
     </item>
     <item>
