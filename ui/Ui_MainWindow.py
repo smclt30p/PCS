@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'src\mainwindow.ui'
+# Form implementation generated from reading ui file 'ui\src\mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.8
 #
@@ -16,6 +16,8 @@ class Ui_MainWindow(object):
         self.centralwidget.setEnabled(True)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_3.setContentsMargins(9, 9, 9, 9)
+        self.verticalLayout_3.setSpacing(6)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.search_bar = QtWidgets.QLineEdit(self.centralwidget)
         self.search_bar.setObjectName("search_bar")
@@ -99,6 +101,10 @@ class Ui_MainWindow(object):
         self.status_bar = QtWidgets.QLabel(self.centralwidget)
         self.status_bar.setObjectName("status_bar")
         self.verticalLayout_3.addWidget(self.status_bar)
+        self.verticalLayout_3.setStretch(0, 5)
+        self.verticalLayout_3.setStretch(1, 60)
+        self.verticalLayout_3.setStretch(2, 20)
+        self.verticalLayout_3.setStretch(3, 5)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 684, 21))
