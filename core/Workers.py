@@ -25,6 +25,8 @@ class SearchWorker(QThread):
         try:
 
             for plugin in self.plugins:
+                if plugin.disabled:
+                    continue
                 for playable in plugin.search(self.query):
                     results.append(playable)
 
