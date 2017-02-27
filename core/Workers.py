@@ -22,6 +22,8 @@ class SearchWorker(QThread):
 
         results = []
 
+        # branch test
+
         try:
 
             for plugin in self.plugins:
