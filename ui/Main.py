@@ -7,10 +7,13 @@ from ui.MainWindow import MainWindow
 
 
 def main():
-    app = QApplication(argv)
-    window = MainWindow(flags=Q_FLAGS())
-    window.show()
-    exit(app.exec_())
+    try:
+        app = QApplication(argv)
+        window = MainWindow(flags=Q_FLAGS())
+        window.show()
+        exit(app.exec_())
+    except BaseException as e:
+        print(str(e))
 
 if __name__=="__main__":
     main()

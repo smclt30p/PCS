@@ -26,6 +26,10 @@
 # + fetchInfo() : void
 #
 ############## IMPLEMENTATION
+import os
+
+from core.plugins.PluginLoader import PluginLoader
+
 
 class Plugin:
 
@@ -51,11 +55,21 @@ class Plugin:
 
     """
 
+    # todo: define plugin settings and about UI
+
     version = None # 1.0.0
     name = None # Example
     author = None # Pera Lozac
     description = None # Example plugin for PCS by Pera
     id = -1
+
+    """
+    If your plugin implements a "About
+    or a "Settings" UI, set these flags to
+    True
+    """
+    hasAbout = False
+    hasSettings = False
 
     def __init__(self):
         print("{} {} loaded".format(self.name, self.version))
@@ -96,6 +110,48 @@ class Plugin:
         """
         pass
 
+    def getAboutInterface(self):
+        """
+        Return a QDialog for the About option
+        This returns a custom QDialog for the
+        "About" option in the plugins menu.
+
+        Create a subclass of any name,
+        and call it whatever you want, and return
+        a instance here.
+
+        The returned object must be a subclass
+        of QDialog.
+        :return:
+        """
+        return None
+
+    def getSettingsInterface(self):
+        """
+        Return a QDialog for the Settings option
+        This returns a custom QDialog for the
+        "Settings" option in the plugins menu.
+
+        Create a subclass of any name,
+        and call it whatever you want, and return
+        a instance here.
+
+        To implement settings, we suggest using
+        QSettings.
+
+        The returned object must be a subclass
+        of QDialog.
+        :return:
+        """
+        return None
+
+    # Internal functions and parameters, do not
+    # care about or modify them
+
+    syspath = None # path in the system
+    nativeName = None # QSettings
+    settings = None
+
     def getVersion(self):
         return self.version
 
@@ -110,6 +166,31 @@ class Plugin:
 
     def getPluginId(self):
         return self.id
+
+    def getSetting(self, key, default=None):
+
+        if default == None:
+            return self.settings.value("{}/{}".format(self.nativeName, key))
+        else:
+            return self.settings.value("{}/{}".format(self.nativeName, key), default)
+
+    def setSetting(self, key, value):
+
+        self.settings.setValue("{}/{}".format(self.nativeName, key), value)
+
+    def setActive(self, state):
+        if state:
+            self.setSetting("active", 1)
+        else:
+            self.setSetting("active", 0)
+
+    def isActive(self):
+        active = int(self.getSetting("active", 1))
+        if active == 1: return True
+        return False
+
+
+
 
 class DataStream:
 

@@ -18,19 +18,17 @@ class SearchWorker(QThread):
     def setQuery(self, query):
         self.query = query
 
+    def setPlugin(self, plugin):
+        self.plugin = plugin
+
     def run(self):
 
         results = []
 
-        # branch test
-
         try:
 
-            for plugin in self.plugins:
-                if plugin.disabled:
-                    continue
-                for playable in plugin.search(self.query):
-                    results.append(playable)
+            for playable in self.plugin.search(self.query):
+                results.append(playable)
 
             self.addToTree.emit(results)
 

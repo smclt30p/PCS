@@ -1,10 +1,18 @@
 import importlib
 import os
 
+from PyQt5.QtCore import QSettings
+
+
+class Continue(BaseException):
+    pass
+
+
 class PluginLoader:
 
     loadedPlugins = []
     loaded = False
+    settings = QSettings("plugins.ini", QSettings.IniFormat)
 
     @staticmethod
     def getLoadedPlugins():
@@ -17,13 +25,27 @@ class PluginLoader:
 
         if not PluginLoader.loaded:
 
-            for plugin in os.listdir("../core/plugins/load/."):
+            for plugin in os.listdir("../plugins/."):
 
-                mod = importlib.import_module("core.plugins.load." + plugin.replace(".py", ""))
+                if not plugin.endswith("_plugin"):
+                    continue
+
+                mod = importlib.import_module("plugins." + plugin + ".PluginImpl")
 
                 if hasattr(mod, "PluginImpl"):
-                    PluginLoader.loadedPlugins.append(getattr(mod, "PluginImpl")())
 
-                PluginLoader.loaded = True
+                    instance = getattr(mod, "PluginImpl")()
+                    instance.nativeName = plugin
+                    instance.settings = PluginLoader.settings
+                    PluginLoader.loadedPlugins.append(instance)
+
+            PluginLoader.loaded = True
 
         return PluginLoader.loadedPlugins
+
+    @classmethod
+    def reloadPlugins(cls):
+        print("Reloading plugins...")
+        PluginLoader.loadedPlugins = []
+        PluginLoader.loaded = False
+        PluginLoader.getLoadedPlugins()

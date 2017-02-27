@@ -2,10 +2,8 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QDir
 from PyQt5.QtCore import pyqtSlot, Q_FLAGS
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtWidgets import QMenu
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QTreeWidgetItem
 from math import floor
@@ -27,6 +25,8 @@ class MainWindow(QMainWindow):
     COL_PLUGIN = 2
     COL_RATING = 3
 
+    workers = []
+
     def __init__(self, flags, *args, **kwargs):
         super().__init__(flags, *args, **kwargs)
 
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
 
         self.playIcon = QIcon(RES_SETTINGS_ICON)
         self.icon = QIcon(RES_PROGRAM_ICON)
-        self.worker = SearchWorker()
+        #self.worker = SearchWorker()
         self.metadataWorker = MetadataWorker()
         self.subtitleWorker = SubtitleWorker()
         self.error = QMessageBox()
@@ -59,8 +59,6 @@ class MainWindow(QMainWindow):
         self.ui.actionVideo_player.triggered.connect(self.openPreferences)
         self.ui.search_bar.returnPressed.connect(self.onSearchReturnPressed)
 
-        self.worker.addToTree.connect(self.displaySearchResults)
-        self.worker.searchError.connect(self.showError)
         self.metadataWorker.fetchError.connect(self.showError)
         self.metadataWorker.done.connect(self.onMetadataReceive)
         self.subtitleWorker.startPlayerCallback.connect(self.startPlayer)
@@ -69,7 +67,10 @@ class MainWindow(QMainWindow):
 
         self.ui.movie_tree.setSortingEnabled(True)
 
-        self.menu = PluginMenu.constructMenu(self.ui.menuPlugins)
+    def showEvent(self, *args, **kwargs):
+
+        self.menu = PluginMenu()
+        self.menu.constructMenu(self.ui.menuPlugins)
 
     def show(self):
         super().show()
@@ -165,32 +166,51 @@ class MainWindow(QMainWindow):
 
         self.item = item
 
-        if self.searchData[item.id].isFetched():
-            self.onMetadataReceive(self.searchData[item.id])
+        if item.playable.isFetched():
+            self.onMetadataReceive(item.playable)
             return
 
 
         self.disableMovieInfo()
-        self.ui.movie_title.setText(self.searchData[item.id].getTitle())
+        self.ui.movie_title.setText(item.playable.getTitle())
 
-        self.metadataWorker.setPlayable(self.searchData[item.id])
+        self.metadataWorker.setPlayable(item.playable)
         self.metadataWorker.start()
 
     def onSearchReturnPressed(self):
 
-        self.worker.setQuery(self.ui.search_bar.text())
-        self.ui.status_bar.setText("SEARCHING...")
+        self.ui.movie_tree.clear()
+        self.workers.clear()
+
         self.ui.centralwidget.setEnabled(False)
-        self.worker.start()
+        self.ui.status_bar.setText("SEARCHING...")
+
+        for plugin in self.plugins:
+
+            if not plugin.isActive():
+                continue
+
+            worker = SearchWorker()
+            worker.addToTree.connect(self.displaySearchResults)
+            worker.searchError.connect(self.showError)
+            self.workers.append(worker)
+
+            worker.setQuery(self.ui.search_bar.text())
+            worker.setPlugin(plugin)
+            worker.start()
 
 
     @pyqtSlot(dict, name="tree")
     def displaySearchResults(self, results):
 
-        self.searchData = results
-        self.ui.movie_tree.clear()
-        self.ui.status_bar.setText("READY")
-        self.ui.centralwidget.setEnabled(True)
+        try:
+            self.workers.pop()
+        except IndexError as e:
+            return
+
+        if len(self.workers) == 0:
+            self.ui.status_bar.setText("READY")
+            self.ui.centralwidget.setEnabled(True)
 
         for i in range(len(results)):
 
@@ -198,6 +218,7 @@ class MainWindow(QMainWindow):
             plugin = "Unknown"
 
             for plugin in self.plugins:
+
                 if parentId == plugin.getPluginId():
                     plugin = plugin.getPluginName()
                     break
@@ -207,9 +228,16 @@ class MainWindow(QMainWindow):
             item.setText(self.COL_PLUGIN, plugin)
             item.setText(self.COL_LEN, "Unknown")
             item.id = i
+            item.playable = results[i]
             self.ui.movie_tree.addTopLevelItem(item)
 
     def showError(self, message):
+
+        for worker in self.workers:
+            worker.terminate()
+
+        self.workers.clear()
+
         self.showErrorDialog(message)
         self.ui.movie_tree.clear()
         self.ui.status_bar.setText("ERROR")
