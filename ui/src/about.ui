@@ -80,7 +80,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Copyright (C) 2016 Ognjen Galic</string>
+      <string>Copyright (C) 2017 Ognjen Galic</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

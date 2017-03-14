@@ -41,8 +41,8 @@ class Ui_AboutDialog(object):
 
     def retranslateUi(self, AboutDialog):
         _translate = QtCore.QCoreApplication.translate
-        AboutDialog.setWindowTitle(_translate("AboutDialog", "Dialog"))
+        AboutDialog.setWindowTitle(_translate("AboutDialog", "PCS - About"))
         self.label.setText(_translate("AboutDialog", "PCS - Putlocker Client System"))
         self.label_2.setText(_translate("AboutDialog", "Version 1.0.0"))
-        self.label_3.setText(_translate("AboutDialog", "Copyright (C) 2016 Ognjen Galic"))
+        self.label_3.setText(_translate("AboutDialog", "Copyright (C) 2017 Ognjen Galic"))
 
