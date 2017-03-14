@@ -28,6 +28,8 @@
 ############## IMPLEMENTATION
 import os
 
+from PyQt5.QtWidgets import QMessageBox
+
 from core.plugins.PluginLoader import PluginLoader
 
 
@@ -152,6 +154,14 @@ class Plugin:
     nativeName = None # QSettings
     settings = None
 
+    def catchException(self, throwable):
+
+        msg = "Exception handled in {} plugin\n\n{}\n\nDisabling plugin, " \
+              "please try the search again.".format(self.getPluginName(), str(throwable))
+
+        self.setActive(False)
+        raise PluginException(msg)
+
     def getVersion(self):
         return self.version
 
@@ -206,6 +216,8 @@ class DataStream:
         return self.streamLabel
 
     def setLabel(self, streamLabel):
+        if not isinstance(streamLabel, str) and len(streamLabel) == 0:
+            self.streamLabel = "Unknown"
         self.streamLabel = streamLabel
 
     def getSource(self):
@@ -217,6 +229,8 @@ class DataStream:
         return self.streamSource
 
     def setSource(self, streamSource):
+        if not isinstance(streamSource, str) and len(streamSource) == 0:
+            self.streamLabel = "Unknown"
         self.streamSource = streamSource
 
 class SubtitleStream:
@@ -233,6 +247,8 @@ class SubtitleStream:
         return self.streamLabel
 
     def setLabel(self, streamLabel):
+        if not isinstance(streamLabel, str) and len(streamLabel) == 0:
+            self.streamLabel = "Unknown"
         self.streamLabel = streamLabel
 
     def getSource(self):
@@ -244,13 +260,15 @@ class SubtitleStream:
         return self.streamSource
 
     def setSource(self, streamSource):
+        if not isinstance(streamSource, str) and len(streamSource) == 0:
+            self.streamLabel = "Unknown"
         self.streamSource = streamSource
 
 class Playable:
 
     posterSource = None
-    title = None
-    description = None
+    title = "No Title"
+    description = "No description available"
     dataStreams = []
     subtitleStreams = []
     parentId = None
@@ -271,6 +289,9 @@ class Playable:
         return self.posterSource
 
     def setPoster(self, posterSource):
+        if posterSource != None and isinstance(posterSource, str):
+            if len(posterSource) == 0:
+                return
         self.posterSource = posterSource
 
     def getTitle(self):
@@ -284,6 +305,8 @@ class Playable:
         return self.title
 
     def setTitle(self, title):
+        if not title == None and len(title) == 0:
+            return
         self.title = title
 
     def getDescription(self):
@@ -296,6 +319,8 @@ class Playable:
         return self.description
 
     def setDescription(self, description):
+        if not description == None and len(description) == 0:
+            return
         self.description = description
 
     def getDataStreams(self):
@@ -349,6 +374,8 @@ class Playable:
         return self.length
 
     def setPlayableLength(self, length):
+        if length != None and not isinstance(length, int):
+            return
         self.length = length
 
     def isFetched(self):

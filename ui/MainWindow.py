@@ -1,6 +1,7 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import QDir
 from PyQt5.QtCore import pyqtSlot, Q_FLAGS
+from PyQt5.QtGui import QColor
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QMainWindow
@@ -14,6 +15,7 @@ from core.Workers import MetadataWorker, SubtitleWorker
 from core.Workers import SearchWorker
 from core.plugins.PluginLoader import PluginLoader
 from core.plugins.PluginMenu import PluginMenu
+from ui.About import About
 from ui.Preferences import PlayerSettings
 from ui.Ui_MainWindow import Ui_MainWindow
 
@@ -41,7 +43,6 @@ class MainWindow(QMainWindow):
         #self.worker = SearchWorker()
         self.metadataWorker = MetadataWorker()
         self.subtitleWorker = SubtitleWorker()
-        self.error = QMessageBox()
         self.player = MediaPlayer()
 
 
@@ -58,6 +59,7 @@ class MainWindow(QMainWindow):
         self.ui.play_button.clicked.connect(self.onPlayButtonClicked)
         self.ui.actionVideo_player.triggered.connect(self.openPreferences)
         self.ui.search_bar.returnPressed.connect(self.onSearchReturnPressed)
+        self.ui.actionAbout.triggered.connect(self.openAbout)
 
         self.metadataWorker.fetchError.connect(self.showError)
         self.metadataWorker.done.connect(self.onMetadataReceive)
@@ -66,6 +68,11 @@ class MainWindow(QMainWindow):
         self.player.playerClosed.connect(self.onPlayerClosed)
 
         self.ui.movie_tree.setSortingEnabled(True)
+
+    def openAbout(self):
+        self.about = About(flags=Q_FLAGS())
+        self.about.show()
+
 
     def showEvent(self, *args, **kwargs):
 
@@ -91,6 +98,10 @@ class MainWindow(QMainWindow):
 
     @QtCore.pyqtSlot(name="clicked")
     def onPlayButtonClicked(self):
+
+        if len(self.streams) == 0:
+            self.showWarning("No streams found, broken plugin?")
+            return
 
         subtitlePath = None
 
@@ -134,8 +145,15 @@ class MainWindow(QMainWindow):
 
         self.enableMovieInfo()
 
-        if drawable is not None: self.ui.poster.setPixmap(playable.getPoster())
-        if description is not None: self.ui.description.setText(playable.getDescription())
+        try:
+
+            if drawable is not None:
+                self.ui.poster.setPixmap(playable.getPoster())
+            if description is not None and len(description) != 0:
+                self.ui.description.setText(playable.getDescription())
+        except BaseException as e:
+            print(str(e))
+
 
         self.streams = playable.getDataStreams()
         self.subtitles = playable.getSubtitleStreams()
@@ -185,6 +203,8 @@ class MainWindow(QMainWindow):
         self.ui.centralwidget.setEnabled(False)
         self.ui.status_bar.setText("SEARCHING...")
 
+        count = 0
+
         for plugin in self.plugins:
 
             if not plugin.isActive():
@@ -199,13 +219,16 @@ class MainWindow(QMainWindow):
             worker.setPlugin(plugin)
             worker.start()
 
+        if len(self.workers) == 0:
+            self.ui.status_bar.setText("READY")
+            self.ui.centralwidget.setEnabled(True)
 
     @pyqtSlot(dict, name="tree")
     def displaySearchResults(self, results):
 
         try:
             self.workers.pop()
-        except IndexError as e:
+        except IndexError:
             return
 
         if len(self.workers) == 0:
@@ -229,6 +252,11 @@ class MainWindow(QMainWindow):
             item.setText(self.COL_LEN, "Unknown")
             item.id = i
             item.playable = results[i]
+
+            brush = item.background(0)
+            brush.setColor(QColor("#ffff0000"))
+            item.setBackground(0, brush)
+
             self.ui.movie_tree.addTopLevelItem(item)
 
     def showError(self, message):
@@ -245,10 +273,12 @@ class MainWindow(QMainWindow):
         self.enableMovieInfo()
 
     def showErrorDialog(self, message):
+        self.error = QMessageBox()
         self.error.setIcon(QMessageBox.Critical)
         self.error.setWindowTitle("Search error")
         self.error.setWindowIcon(self.icon)
         self.error.setText(message)
+        self.menu.constructMenu(self.ui.menuPlugins)
         self.error.show()
 
     def fetchMetadata(self, url, siteurl):
@@ -270,5 +300,14 @@ class MainWindow(QMainWindow):
         self.ui.subtitle_combo.setEnabled(True)
         self.ui.movie_title.setEnabled(True)
         self.ui.description.setEnabled(True)
+
+    def showWarning(self, message):
+
+        self.warning = QMessageBox()
+        self.warning.setIcon(QMessageBox.Warning)
+        self.warning.setWindowIcon(self.icon)
+        self.warning.setText(message)
+        self.warning.setWindowTitle("No streams found")
+        self.warning.show()
 
 

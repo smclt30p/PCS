@@ -25,7 +25,7 @@ class PluginLoader:
 
         if not PluginLoader.loaded:
 
-            for plugin in os.listdir("../plugins/."):
+            for plugin in os.listdir("plugins/."):
 
                 if not plugin.endswith("_plugin"):
                     continue

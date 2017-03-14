@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui\src\mainwindow.ui'
+# Form implementation generated from reading ui file '.\ui\src\mainwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.8
+# Created by: PyQt5 UI code generator 5.8.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -97,7 +97,10 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menubar)
         self.actionVideo_player = QtWidgets.QAction(MainWindow)
         self.actionVideo_player.setObjectName("actionVideo_player")
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
         self.menuPrefences.addAction(self.actionVideo_player)
+        self.menuAbout.addAction(self.actionAbout)
         self.menubar.addAction(self.menuPrefences.menuAction())
         self.menubar.addAction(self.menuPlugins.menuAction())
         self.menubar.addAction(self.menuAbout.menuAction())
@@ -120,4 +123,5 @@ class Ui_MainWindow(object):
         self.menuAbout.setTitle(_translate("MainWindow", "About"))
         self.menuPlugins.setTitle(_translate("MainWindow", "Plugins"))
         self.actionVideo_player.setText(_translate("MainWindow", "Preferences"))
+        self.actionAbout.setText(_translate("MainWindow", "About"))
 

@@ -61,8 +61,8 @@ class MetadataWorker(QThread):
             if self.playable.getPoster() != None:
                 drawable = requests.get(self.playable.getPoster())
                 pixmap = QPixmap()
-                pixmap.loadFromData(drawable.content)
-                self.playable.setPoster(pixmap)
+                if pixmap.loadFromData(drawable.content):
+                    self.playable.setPoster(pixmap)
 
             self.playable.setFetched(True)
             self.done.emit(self.playable)

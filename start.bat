@@ -1,0 +1,1 @@
+cmd /V /C "set PYTHONPATH=%CD%&& python ui\Main.py"

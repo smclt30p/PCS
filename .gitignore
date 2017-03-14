@@ -1,4 +1,4 @@
 .idea
-ui/settings.ini
+settings.ini
 plugins
-ui/plugins.ini
+plugins.ini

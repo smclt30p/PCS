@@ -11,9 +11,9 @@ ARGS_SUB_VLC_DEF = "--sub-file=%SUB%"
 ARGS_WMP_DEF = "%URL"
 ARGS_SUB_WPM_DEF = ""
 
-RES_PROGRAM_ICON = "res/icon.png"
-RES_SETTINGS_ICON = "res/play.png"
-RES_PREF_IC = "../ui/res/play.png"
+RES_PROGRAM_ICON = "ui/res/icon.png"
+RES_SETTINGS_ICON = "ui/res/play.png"
+RES_PREF_IC = "ui/res/play.png"
 
 STRING_PROGRAM_NAME = "PCS"
 RES_PREF_TITLE = "PCS - Preferences"
