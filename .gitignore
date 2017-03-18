@@ -1,5 +1,7 @@
 .idea
 settings.ini
-plugins
 plugins.ini
-_pycache__
+_pycache__/
+__pycache__/
+plugins/putlocker_plugin
+plugins/vumoo_plugin
