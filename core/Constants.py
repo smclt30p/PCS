@@ -1,3 +1,5 @@
+PCS_VERSION = "Version v1.1"
+
 SETT_PATH = "path"
 SETT_ARGS_MAIN = "argsMain"
 SETT_ARGS_SUB = "argsTitle"
