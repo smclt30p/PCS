@@ -57,5 +57,5 @@ class Ui_AboutDialog(object):
         _translate = QtCore.QCoreApplication.translate
         AboutDialog.setWindowTitle(_translate("AboutDialog", "PCS - About"))
         self.label.setText(_translate("AboutDialog", "PCS - Putlocker Client System"))
-        self.label_3.setText(_translate("AboutDialog", "Copyright (C) 2017 Ognjen Galic"))
+        self.label_3.setText(_translate("AboutDialog", "Copyright © 2017 Ognjen Galić"))
 
