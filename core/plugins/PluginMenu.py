@@ -17,6 +17,11 @@ class PluginMenu(QObject):
         root.clear()
         plugins = PluginLoader.getLoadedPlugins()
 
+        if len(plugins) == 0:
+            item = root.addAction("No plugins found")
+            item.setEnabled(False)
+            return
+
         for plugin in plugins:
 
             item = root.addMenu(plugin.getPluginName())
