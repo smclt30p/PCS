@@ -227,7 +227,10 @@ class MainWindow(QMainWindow):
     def displaySearchResults(self, results):
 
         try:
-            self.tempWorker = self.workers.pop()
+
+            worker = self.workers.pop()
+            worker.wait()
+
         except IndexError:
             return
 
