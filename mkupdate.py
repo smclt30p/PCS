@@ -4,6 +4,15 @@ import sys
 import tarfile
 
 
+def getCurrentBranch():
+
+    output = subprocess.check_output(["git", "branch"])
+    for branch in str(output).strip("b'\\n").split("\\n"):
+
+        if branch.startswith("*"):
+            return branch.replace("*", "").strip()
+
+
 def main():
 
     if len(sys.argv) < 4:
@@ -14,6 +23,9 @@ def main():
 
     try:
 
+        currentBranch = getCurrentBranch()
+
+        subprocess.check_output(["git", "checkout", sys.argv[2]])
         data = subprocess.check_output(["git", "diff", "--name-only", sys.argv[1], sys.argv[2]])
 
     except subprocess.CalledProcessError as e:
@@ -52,6 +64,11 @@ def main():
     print("\nFinishing update package creation...")
 
     tar.close()
+
+    try:
+        subprocess.check_output(["git", "checkout", currentBranch])
+    except subprocess.CalledProcessError:
+        print("Checkout to old branch failed !!! Checkout manually!")
 
     print("\nUpdate package {} created.".format(path))
 
