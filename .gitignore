@@ -5,3 +5,4 @@ _pycache__/
 __pycache__/
 plugins/putlocker_plugin
 plugins/vumoo_plugin
+*.lnk
