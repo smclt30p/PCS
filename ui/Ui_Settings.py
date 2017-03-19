@@ -2,16 +2,18 @@
 
 # Form implementation generated from reading ui file 'src\settings.ui'
 #
-# Created by: PyQt5 UI code generator 5.8
+# Created by: PyQt5 UI code generator 5.8.1
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Settings(object):
     def setupUi(self, Settings):
         Settings.setObjectName("Settings")
+        Settings.setWindowModality(QtCore.Qt.ApplicationModal)
         Settings.resize(536, 490)
+        Settings.setModal(True)
         self.gridLayout_2 = QtWidgets.QGridLayout(Settings)
         self.gridLayout_2.setObjectName("gridLayout_2")
         spacerItem = QtWidgets.QSpacerItem(434, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
