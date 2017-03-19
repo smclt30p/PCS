@@ -11,6 +11,7 @@ from math import floor
 
 from core.Constants import *
 from core.Player import MediaPlayer
+from core.Updater import Updater
 from core.Workers import MetadataWorker, SubtitleWorker
 from core.Workers import SearchWorker
 from core.plugins.PluginLoader import PluginLoader
@@ -68,6 +69,20 @@ class MainWindow(QMainWindow):
         self.player.playerClosed.connect(self.onPlayerClosed)
 
         self.ui.movie_tree.setSortingEnabled(True)
+
+        self.updater = Updater()
+        self.updater.updateAvailable.connect(self.updateAvailable)
+        self.updater.start()
+
+
+    def updateAvailable(self, version):
+
+        if version < PCS_VERSION:
+            self.ui.status_bar.setText("WARNING: RUNNING DEVELOPMENT BUILD !!!")
+        else:
+            update_str = str(version)
+            self.ui.status_bar.setText("Update available: PCS v{}.{}".format(update_str[0], update_str[1]))
+
 
     def openAbout(self):
         self.about = About(flags=Q_FLAGS())

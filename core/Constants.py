@@ -1,4 +1,6 @@
-PCS_VERSION = "Version v1.2"
+PCS_VERSION_STRING = "Version v1.2"
+PCS_VERSION = 12
+PCS_UPDATE_DEFAULT_ENDPOINT = "https://raw.githubusercontent.com/smclt30p/pcs_update/master/update.json"
 
 SETT_PATH = "path"
 SETT_ARGS_MAIN = "argsMain"

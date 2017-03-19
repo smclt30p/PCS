@@ -13,4 +13,4 @@ class About(QDialog):
         self.ui.setupUi(self)
         self.setWindowIcon(QIcon("ui/res/icon.png"))
         self.ui.bg.setPixmap(QPixmap("ui/res/logo.png"))
-        self.ui.version_string.setText(PCS_VERSION)
+        self.ui.version_string.setText(PCS_VERSION_STRING)
