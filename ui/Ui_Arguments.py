@@ -2,16 +2,18 @@
 
 # Form implementation generated from reading ui file 'src\arguments.ui'
 #
-# Created by: PyQt5 UI code generator 5.8
+# Created by: PyQt5 UI code generator 5.8.1
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Arguments(object):
     def setupUi(self, Arguments):
         Arguments.setObjectName("Arguments")
+        Arguments.setWindowModality(QtCore.Qt.ApplicationModal)
         Arguments.resize(564, 424)
+        Arguments.setModal(True)
         self.gridLayout = QtWidgets.QGridLayout(Arguments)
         self.gridLayout.setObjectName("gridLayout")
         self.label = QtWidgets.QLabel(Arguments)
