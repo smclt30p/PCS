@@ -6,8 +6,8 @@ import tarfile
 
 def main():
 
-    if len(sys.argv) < 3:
-        print("Invalid parameters! Found {} expected 3".format(len(sys.argv)))
+    if len(sys.argv) < 4:
+        print("mkupdate.py [version 1] [version 2] [destination]")
         sys.exit(1)
 
     print("Creating update package from {} to {} for PCS\n".format(sys.argv[1], sys.argv[2]))
@@ -32,11 +32,7 @@ def main():
     old_ver = sys.argv[1].replace("v", "").replace(".", "")
     new_ver = sys.argv[2].replace("v", "").replace(".", "")
 
-    if len(sys.argv) == 4:
-        path = "{}/{}_{}.tar.xz".format(sys.argv[3], old_ver, new_ver)
-    else:
-        path = "update/{}_{}.tar.xz".format(old_ver, new_ver)
-
+    path = "{}/{}_{}.tar.xz".format(sys.argv[3], old_ver, new_ver)
 
     print("\nCreating update package {}\n".format(path))
 
