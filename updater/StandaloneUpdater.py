@@ -1,3 +1,4 @@
+import subprocess
 import sys
 import tarfile
 
@@ -7,8 +8,10 @@ from PyQt5.QtCore import QDir
 from PyQt5.QtCore import QThread
 from PyQt5.QtCore import Q_FLAGS
 from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QMessageBox
 
 from updater.Ui_Updater import Ui_Updater
 
@@ -35,6 +38,8 @@ class MainWindow(QDialog):
         self.app = app
 
         self.ui.title.setText("Updating PCS to " + sys.argv[1])
+        self.setWindowIcon(QIcon("ui/res/icon.png"))
+        self.setWindowTitle("Standalone Updater - PCS")
 
         self.updater = Updater()
 
@@ -44,6 +49,9 @@ class MainWindow(QDialog):
         self.updater.complete.connect(self.complete)
 
         self.updater.start()
+
+        self.ui.step1.setEnabled(False)
+        self.ui.step2.setEnabled(False)
 
     def updateTitle(self, title):
         self.ui.title.setText(title)
@@ -57,10 +65,19 @@ class MainWindow(QDialog):
         self.ui.step2.setEnabled(True)
 
     def complete(self):
+
         self.ui.title.setText("Upgrade complete!")
         self.ui.step1.setEnabled(False)
         self.ui.step2.setEnabled(False)
-        self.app.exit(0)
+
+        try:
+            subprocess.Popen(["pythonw", "ui/Main.py"])
+        except BaseException as e:
+            box = QMessageBox()
+            box.critical(self, "Failed to launch PCS!", "PCS Failed to launch, please launch manually!", QMessageBox.Close)
+
+        sys.exit(0)
+
 
 class Updater(QThread):
 
@@ -94,6 +111,7 @@ class Updater(QThread):
                         nextVersion = update[currentVersion]
 
                 if nextVersion is None:
+                    self.complete.emit()
                     break
 
                 self.updateTitle.emit("Updating from {} to {}".format(currentVersion, nextVersion))
