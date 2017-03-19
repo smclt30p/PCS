@@ -1,4 +1,4 @@
-PCS_VERSION = "Version v1.1"
+PCS_VERSION = "Version v1.2"
 
 SETT_PATH = "path"
 SETT_ARGS_MAIN = "argsMain"
