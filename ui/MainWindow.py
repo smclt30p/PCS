@@ -1,3 +1,5 @@
+import subprocess
+
 from PyQt5 import QtCore
 from PyQt5.QtCore import QDir
 from PyQt5.QtCore import pyqtSlot, Q_FLAGS
@@ -30,8 +32,10 @@ class MainWindow(QMainWindow):
 
     workers = []
 
-    def __init__(self, flags, *args, **kwargs):
+    def __init__(self, app, flags, *args, **kwargs):
         super().__init__(flags, *args, **kwargs)
+
+        self.app = app
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -87,7 +91,13 @@ class MainWindow(QMainWindow):
             reply = box.question(self, "Update available!", "Do you want to update PCS?", QMessageBox.Yes, QMessageBox.Close)
 
             if reply == QMessageBox.Yes:
-                print("RUN UPDATER!!")
+                try:
+                    subprocess.Popen(["python", "updater/StandaloneUpdater.py", str(PCS_VERSION)])
+                    self.app.exit(0)
+                except BaseException as e:
+                    self.showErrorDialog(str(e))
+
+
             else:
                 return
 

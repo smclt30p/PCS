@@ -9,7 +9,7 @@ from ui.MainWindow import MainWindow
 def main():
     try:
         app = QApplication(argv)
-        window = MainWindow(flags=Q_FLAGS())
+        window = MainWindow(app, flags=Q_FLAGS())
         window.show()
         exit(app.exec_())
     except BaseException as e:
