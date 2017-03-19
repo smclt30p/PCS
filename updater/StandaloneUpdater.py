@@ -81,8 +81,8 @@ class MainWindow(QDialog):
 
 class Updater(QThread):
 
-    UPDATE_URL = "https://raw.githubusercontent.com/smclt30p/pcs_update/latest-stable/{}_{}.tar.xz"
-    PATHS_URL = "https://raw.githubusercontent.com/smclt30p/pcs_update/latest-stable/paths.json"
+    UPDATE_URL = "https://raw.githubusercontent.com/smclt30p/pcs_update/master/{}_{}.tar.xz"
+    PATHS_URL = "https://raw.githubusercontent.com/smclt30p/pcs_update/master/paths.json"
 
     updateTitle = pyqtSignal(str)
     step1 = pyqtSignal()
