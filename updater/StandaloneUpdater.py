@@ -81,7 +81,8 @@ class MainWindow(QDialog):
 
 class Updater(QThread):
 
-    UPDATE_URL = "https://raw.githubusercontent.com/smclt30p/pcs_update_test/latest-stable/{}_{}.tar.xz"
+    UPDATE_URL = "https://raw.githubusercontent.com/smclt30p/pcs_update/latest-stable/{}_{}.tar.xz"
+    PATHS_URL = "https://raw.githubusercontent.com/smclt30p/pcs_update/latest-stable/paths.json"
 
     updateTitle = pyqtSignal(str)
     step1 = pyqtSignal()
@@ -129,7 +130,7 @@ class Updater(QThread):
                 self.step2.emit()
 
                 tar = tarfile.open(path, "r:xz")
-                tar.extractall("../PCSUpdateTest/test")
+                tar.extractall(".")
 
                 currentVersion = nextVersion
                 nextVersion = None
@@ -140,14 +141,9 @@ class Updater(QThread):
             self.updateTitle.emit("UPDATE FAILED!")
             print("ERROR! " + str(e))
 
-
-    def failUpdate(self):
-        # todo: handle fail
-        pass
-
     def getUpdatePaths(self):
         # todo: handle no network
-        data = requests.get("https://raw.githubusercontent.com/smclt30p/pcs_update_test/latest-stable/paths.json")
+        data = requests.get(self.PATHS_URL)
         json = demjson.JSON()
         return json.decode(data.text)
 
