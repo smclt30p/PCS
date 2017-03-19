@@ -83,6 +83,13 @@ class MainWindow(QMainWindow):
             update_str = str(version)
             self.ui.status_bar.setText("Update available: PCS v{}.{}".format(update_str[0], update_str[1]))
 
+            box = QMessageBox()
+            reply = box.question(self, "Update available!", "Do you want to update PCS?", QMessageBox.Yes, QMessageBox.Close)
+
+            if reply == QMessageBox.Yes:
+                print("RUN UPDATER!!")
+            else:
+                return
 
     def openAbout(self):
         self.about = About(flags=Q_FLAGS())
