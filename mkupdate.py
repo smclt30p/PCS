@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 import tarfile
@@ -5,8 +6,8 @@ import tarfile
 
 def main():
 
-    if len(sys.argv) != 3:
-        print("Invalid parameters! Found {} expected 2".format(len(sys.argv)))
+    if len(sys.argv) < 3:
+        print("Invalid parameters! Found {} expected 3".format(len(sys.argv)))
         sys.exit(1)
 
     print("Creating update package from {} to {} for PCS\n".format(sys.argv[1], sys.argv[2]))
@@ -28,16 +29,23 @@ def main():
     for file in changedFiles:
         print("Updating: ", file)
 
-    path = "update/{}_{}.tar.xz".format(sys.argv[1].replace("v", "").replace(".", ""),
-                                        sys.argv[2].replace("v", "").replace(".", ""))
+    old_ver = sys.argv[1].replace("v", "").replace(".", "")
+    new_ver = sys.argv[2].replace("v", "").replace(".", "")
+
+    if len(sys.argv) == 4:
+        path = "{}/{}_{}.tar.xz".format(sys.argv[3], old_ver, new_ver)
+    else:
+        path = "update/{}_{}.tar.xz".format(old_ver, new_ver)
+
 
     print("\nCreating update package {}\n".format(path))
 
     try:
         tar = tarfile.open(path, mode="x:xz")
     except FileExistsError as e:
-        print("Update package already exists!")
-        return
+        print("Update package already exists! Deleting...\n")
+        os.remove(path)
+        tar = tarfile.open(path, mode="x:xz")
 
     for file in changedFiles:
         print("Adding to archive " + file)
