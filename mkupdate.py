@@ -29,10 +29,8 @@ def main():
     for file in changedFiles:
         print("Updating: ", file)
 
-    old_ver = sys.argv[1].replace("v", "").replace(".", "")
-    new_ver = sys.argv[2].replace("v", "").replace(".", "")
-
-    path = "{}/{}_{}.tar.xz".format(sys.argv[3], old_ver, new_ver)
+    path = "{}/{}_{}.tar.xz".format(sys.argv[3], sys.argv[1].replace("v", "").replace(".", ""),
+                                    sys.argv[2].replace("v", "").replace(".", ""))
 
     print("\nCreating update package {}\n".format(path))
 
