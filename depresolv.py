@@ -21,7 +21,11 @@ def getFunctionalPip():
             return "pip3"
         except BaseException:
             print("No operational pip intallation found!")
-            raise DepresolvFailed("No operational pip intallation found!")
+            return False
+
+ALL_SATISFIED = 0
+INSTALLED_AND_SATISFIED = 1
+INSTALL_FAILED = 2
 
 class DependencyResolver():
 
@@ -30,43 +34,42 @@ class DependencyResolver():
     failed = []
 
     def config(self, dependencies, modulename):
-
         print("Resolving dependencies for {}: ".format(modulename) + str(dependencies))
         self.dependencies = dependencies
 
     def resolve(self):
 
+        installed_something = False
+
         for module in self.dependencies:
-
             print("Resolving {} -- ".format(module), end="")
-
             try:
                 importlib.import_module(module)
                 print("OK!")
             except ModuleNotFoundError:
-
                 print("Installing {} -- ".format(module), end="")
-
                 try:
-                    subprocess.check_output([getFunctionalPip(), "install", module], stderr=subprocess.STDOUT)
+                    pip = getFunctionalPip()
+
+                    if pip is False:
+                        return INSTALL_FAILED
+
+                    subprocess.check_output([pip, "install","--user", module], stderr=subprocess.STDOUT)
+                    installed_something = True
+
                     print("OK")
                 except subprocess.CalledProcessError as e:
                     print("Module install failed for {} with the following output:\n\n{}".format(str(e), e.output.decode("utf-8")))
-                    raise DepresolvFailed("Module install failed for {} with the following output:\n\n{}".format(str(e), e.output.decode("utf-8")))
 
-        print("All dependencies satisfied.")
+                    return INSTALL_FAILED
 
-class PIPError(BaseException): pass
-class DepresolvMain(BaseException): pass
-class DepresolvFailed(BaseException): pass
+        if installed_something: return INSTALLED_AND_SATISFIED
+        else: return ALL_SATISFIED
+
 
 def launch_main(deps):
-    
-        print("Resolving runtime dependencies, please wait. "
-              "The program should start by itself, if something fails, restart the program.")
 
+        print("Resolving runtime dependencies, please wait...\n\n")
         resolver = DependencyResolver()
         resolver.config(deps, "launch_main")
-        resolver.resolve()
-        print("Launching main...")
-        raise DepresolvMain
+        return resolver.resolve()
