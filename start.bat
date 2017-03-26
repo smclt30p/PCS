@@ -1,3 +1,7 @@
 set PYTHONPATH=%CD%
-start pythonw ui\Main.py
-exit
+if EXIST installed (
+    start pythonw ui\Main.py
+    exit
+) else (
+    start python ui\Main.py
+)

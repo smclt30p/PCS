@@ -5,7 +5,12 @@ def main():
 
     try:
         depresolv.launch_main(["PyQt5", "demjson", "bs4", "lxml", "requests"])
+
+
     except depresolv.DepresolvMain:
+
+        flag = open("installed", "wb+")
+        flag.close()
 
         from ui.MainWindow import MainWindow
         from PyQt5.QtCore import Q_FLAGS
