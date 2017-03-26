@@ -1,5 +1,5 @@
-PCS_VERSION_STRING = "Version v1.6"
-PCS_VERSION = 16
+PCS_VERSION_STRING = "Version v1.7"
+PCS_VERSION = 17
 PCS_UPDATE_DEFAULT_ENDPOINT = "https://raw.githubusercontent.com/smclt30p/pcs_update/master/update.json"
 
 SETT_PATH = "path"

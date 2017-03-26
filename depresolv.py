@@ -61,6 +61,9 @@ class DepresolvMain(BaseException): pass
 class DepresolvFailed(BaseException): pass
 
 def launch_main(deps):
+    
+        print("Resolving runtime dependencies, please wait. "
+              "The program should start by itself, if something fails, restart the program.")
 
         resolver = DependencyResolver()
         resolver.config(deps, "launch_main")
