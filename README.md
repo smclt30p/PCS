@@ -1,5 +1,4 @@
 # PCS - Putlocker Client System
-----
 ![PCS](http://i.imgur.com/J6dyIND.png)
 
 ## How does it work?
@@ -17,6 +16,7 @@ a matter of hours.
 
 ## Auto-updater
 PCS updates itself, so you just need to install it once!
+
 ![Updater](http://i.imgur.com/s9SiDUC.png)
 
 ## Where can I run it?
